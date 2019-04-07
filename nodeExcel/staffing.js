@@ -24,7 +24,7 @@ async function ildPut() {
     startDay = moment().subtract(1, 'day');
     var endDay = moment();
 
-    console.log(startDay.format('MMMM').replace('ń','\u0144'));
+    console.log(startDay.format('MMMM').replace('ń','\u0144')); //zamiana znaku polskiego na charcode
 
     //TESTOWANIE
     // console.log(endDay.diff(startDay, 'minutes'));
