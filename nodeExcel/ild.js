@@ -9,19 +9,21 @@ const dbconfig = { user: "minimes_ff_wbr", password: "Baza0racl3appl1cs", connec
 
 
 //NAZWY POLSKICH ZNAKOW PODAWAÆ JAKO \uKODZNAKU
-var str = 'C:\\aaa\u0144\\tes t.xlsm';
+var str;
 
 console.clear();
+
 async function ildPut() {
     var weeknumber;
 
     //TRYB_TEST
-    var startDay = moment('2019-03-01');
-    var endDay = moment('2019-03-05');
+    var startDay = moment('2019-05-26');
+    var endDay = moment('2019-05-26');
     
     //TRYB NORMAL
     startDay = moment().subtract(1, 'day');
     endDay = moment();
+    //endDay = moment().subtract(1, 'day');
 
 
     //TESTOWANIE
@@ -35,12 +37,29 @@ async function ildPut() {
         connectString: "172.22.8.47/ORA"
     });
 
-    for (var day = startDay; day < endDay; day.add(1, 'day')) {
 
+    for (var day = startDay; day < endDay; day.add(1, 'day')) {
         //day = moment("02-" + d + "-2019", "MM-DD-YYYY");
         weeknumber = day.isoWeek();
+        try {
+            var items = fs.readdirSync('\\\\172.22.6.130\\pf$\\PW4 Wulkanizacja\\dzie\u0144\\ANALIZY\\');
+            // console.log(items);
+            for (var i = 0; i < items.length; i++) {
+                str = 'sd';
+                //console.log('(' + day.format('YYYY.MM.DD') + ').xlsm');
+                if (items[i].indexOf('(' + day.format('YYYY.MM.DD') + ').xlsm') > 0) {
+                    str = '\\\\172.22.6.130\\pf$\\PW4 Wulkanizacja\\dzie\u0144\\ANALIZY\\' + items[i];
+                    console.log(str);
+                    break;
+                }
+            } 
+        } catch (err) {
+            console.log(err);
+        }
 
-        str = '\\\\172.22.6.130\\pf$\\PW4 Wulkanizacja\\dzie\u0144\\ANALIZY\\Analiza zdania WEEK ' + (weeknumber < 10 ? '0' : '') + weeknumber + ' (' + day.format('YYYY.MM.DD') + ').xlsm';
+
+
+       // str = '\\\\172.22.6.130\\pf$\\PW4 Wulkanizacja\\dzie\u0144\\ANALIZY\\Analiza zdania WEEK ' + (weeknumber < 10 ? '0' : '') + (weeknumber) + ' (' + day.format('YYYY.MM.DD') + ').xlsm';
         //console.log(str);
         try {
             if (fs.existsSync(str)) {
@@ -141,7 +160,7 @@ async function ildPut() {
                 insertIldString += ' SELECT * FROM DUAL';
 
 
-                //USUWANIE REKORDOW Z BAZY - ILD  PLAN
+                ////USUWANIE REKORDOW Z BAZY - ILD  PLAN
                 await connection.execute('DELETE FROM FF_ILD_PLAN', {}, {},
                     function (err, result) {
                         if (err) {
@@ -179,10 +198,21 @@ async function ildPut() {
     await connection.commit();
     await connection.close();
     var end = new Date() - start;
-    console.info('Execution time in node JS: %d second', end/1000);
+    console.info('Execution time in node JS: %d second', end / 1000);
+
 }
 
 ildPut();
+
+
+
+//fs.readdir('\\\\172.22.6.130\\pf$\\PW4 Wulkanizacja\\dzie\u0144\\ANALIZY\\', function (err, items) {
+//    console.log(items);
+
+//    for (var i = 0; i < items.length; i++) {
+//        console.log(items[i]);
+//    }
+//});
 
 
 
