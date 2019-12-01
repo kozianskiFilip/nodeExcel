@@ -57,7 +57,7 @@ var shiftsArray = ['0321',
                 '3210'
 ];
 
-        var dept = 'PK';
+        var dept = 'BT4';
 
         fs.unlink('C:\\brama\\' + dept + '.txt', function (err) {
             if (err) throw err;

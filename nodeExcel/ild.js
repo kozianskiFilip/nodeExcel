@@ -17,13 +17,13 @@ async function ildPut() {
     var weeknumber;
 
     //TRYB_TEST
-    var startDay = moment('2019-05-26');
-    var endDay = moment('2019-05-26');
+    var startDay = moment('2019-07-30');
+    var endDay = moment('2019-08-03');
     
     //TRYB NORMAL
     startDay = moment().subtract(1, 'day');
     endDay = moment();
-    //endDay = moment().subtract(1, 'day');
+    endDay = moment().subtract(0, 'day');
 
 
     //TESTOWANIE
@@ -160,15 +160,7 @@ async function ildPut() {
                 insertIldString += ' SELECT * FROM DUAL';
 
 
-                ////USUWANIE REKORDOW Z BAZY - ILD  PLAN
-                await connection.execute('DELETE FROM FF_ILD_PLAN', {}, {},
-                    function (err, result) {
-                        if (err) {
-                            console.error(err);
-                            return;
-                        }
-                        console.log('USUNIÊTO DANE STARE');
-                    });
+
 
                 //   WSTAWIANIE DANYCH DO BAZY - ILD  PLAN
                 await connection.execute(insertIldString,
@@ -186,6 +178,15 @@ async function ildPut() {
                         console.log('WSTAWIONO PLAN ILD');
                     });
 
+                ////USUWANIE REKORDOW Z BAZY - ILD  PLAN
+                await connection.execute('delete from ff_ild_plan where rowid in (select rowid from (select rowid, rank() over(partition by day, sapcode, wd11 order by rowid desc) ranking from ff_ild_plan) where ranking!=1)', {}, {},
+                    function (err, result) {
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
+                        console.log('USUNIÊTO DANE STARE');
+                    });
             }
             else {
                 console.log('BRAK PLIKU W LOKALIZACJI: ' + str);
