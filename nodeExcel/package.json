@@ -9,6 +9,6 @@
   "dependencies": {
     "moment": "^2.23.0",
     "oracledb": "^3.0.1",
-    "xlsx": "^0.14.1"
+    "xlsx": "^0.17.0"
   }
 }
